@@ -1,0 +1,68 @@
+<!-- <div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <form [formGroup]="profileForm" (ngSubmit)="downloadVideo()">
+        <input
+          [required]="true"
+          type="text"
+          formControlName="videoUrl"
+          class="form-control input-lg"
+        />
+        <button type="submit" class="btn btn-info">Download</button>
+      </form>
+    </div>
+  </div>
+</div> -->
+
+<div class="s013">
+  <form [formGroup]="profileForm" (ngSubmit)="downloadVideo()">
+    <fieldset>
+      <legend>YOUTUBE VIDEO DOWNLOADER</legend>
+      <label class="created-by"
+        >Created by
+        <a href="https://github.com/karankarpe92" target="_blank"
+          >Karan Karpe</a
+        ></label
+      >
+    </fieldset>
+    <div class="inner-form">
+      <div class="left">
+        <div class="input-wrap first">
+          <div class="input-field first">
+            <label>Paste YouTube Video URL here</label>
+            <input
+              formControlName="videoUrl"
+              type="text"
+              placeholder="ex: https://www.youtube.com/watch?v=EXaEz0mJXWY"
+            />
+          </div>
+        </div>
+        <div class="input-wrap second">
+          <div class="input-field second">
+            <label>Download Type</label>
+            <div class="input-select">
+              <select
+                formControlName="videoType"
+                data-trigger=""
+                name="choices-single-defaul"
+              >
+                <option selected [value]="'videos'">VIDEO</option>
+                <option [value]="'mp3'">MP3 ONLY</option>
+                <!-- <option [value]="'mp3-mp4'">MP3 AND VIDEO</option> -->
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="btn-search" type="submit">
+        <fa-icon
+          *ngIf="loader"
+          [icon]="faCircleNotch"
+          [spin]="true"
+          size="lg"
+        ></fa-icon>
+        <span *ngIf="!loader">DOWNLOAD</span>
+      </button>
+    </div>
+  </form>
+</div>

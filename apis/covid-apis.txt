@@ -1,0 +1,76 @@
+
+
+  getTotals() {
+    let headers = {
+      headers: new HttpHeaders({
+        responseType: "json",
+        "x-rapidapi-host": "covid-19-data.p.rapidapi.com",
+        "x-rapidapi-key": "7fba68f20bmsh644db43347c2ef4p1ff20fjsn511aabdd4605",
+      }),
+    };
+
+    this.httpClient
+      .get("https://covid-19-data.p.rapidapi.com/totals", headers)
+      .subscribe((response: any[]) => {
+        if (response && response.length > 0) {
+          let counts = response[0];
+          this.totalCounts.confirmed = counts.confirmed;
+          this.totalCounts.recovered = counts.recovered;
+          this.totalCounts.critical = counts.critical;
+          this.totalCounts.deaths = counts.deaths;
+        }
+      });
+  }
+
+  getCountryTotals() {
+    let headers = {
+      headers: new HttpHeaders({
+        responseType: "json",
+        "x-rapidapi-host": "covid-19-coronavirus-statistics.p.rapidapi.com",
+        "x-rapidapi-key": "7fba68f20bmsh644db43347c2ef4p1ff20fjsn511aabdd4605",
+      }),
+    };
+
+    this.httpClient
+      .get(
+        "https://covid-19-coronavirus-statistics.p.rapidapi.com/v1/stats",
+        headers
+      )
+      .subscribe((response: any) => {
+        let list = [];
+        if (response && response.data && response.data.covid19Stats) {
+          let responseList = response.data.covid19Stats;
+          let distinctCountries = responseList
+            .map((item) => item.country)
+            .filter((value, index, self) => self.indexOf(value) === index);
+
+          if (distinctCountries && distinctCountries.length > 0) {
+            distinctCountries.forEach((country) => {
+              let countryWiseList = responseList.filter(
+                (i) => i.country == country
+              );
+
+              let data = {
+                country: country,
+                confirmed: 0,
+                recovered: 0,
+                deaths: 0,
+                lastUpdate: countryWiseList[0].lastUpdate,
+              };
+              countryWiseList.forEach((element) => {
+                data.confirmed = data.confirmed + element.confirmed;
+                data.recovered = data.recovered + element.recovered;
+                data.deaths = data.deaths + element.deaths;
+              });
+
+              list.push(data);
+            });
+          }
+
+          list = list.sort(
+            (a, b) => parseFloat(b.confirmed) - parseFloat(a.confirmed)
+          );
+          this.countryWiseList = list;
+        }
+      });
+  }
